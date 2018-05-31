@@ -4,28 +4,33 @@ using namespace std;
 
 class Fan {
 private:
-    int speed;
+    int speed; //range 1-3
     bool on;
-    int radius;
+    int radius; //only positive radius values
 
 public:
     Fan() {
+        //the default fan
         speed = 1;
         on = false;
         radius = 5;
     }
 
     Fan(int s, bool o, int r) {
+        //reuse the set functions below
         setSpeed(s);
         on = o;
         setRadius(r);
     }
 
+    //accessor functions
     int getSpeed() { return speed; }
     int getOn() { return on; }
     int getRadius() { return radius; }
 
+    //mutator functions
     void setSpeed(int s) {
+        //make sure input is in range, otherwise use the default value
         if (s >= 1 && s <= 3)
             speed = s;
         else
@@ -34,6 +39,7 @@ public:
     void turnOn() { on = true; }
     void turnOff() { on = false; }
     void setRadius(int r) {
+        //make sure input is positive, otherwise use the default value
         if (r > 0)
             radius = r;
         else
@@ -52,16 +58,19 @@ public:
         this->c = c;
     }
 
+    //accessor functions
     double getA() { return a; }
     double getB() { return b; }
     double getC() { return c; }
 
+    //calculate the discriminant
     double getDiscriminant() {
         return b*b - 4*a*c;
     }
 
     double getRoot1() {
         double d = getDiscriminant();
+        //make sure the discriminant is a legal value
         if (d < 0)
             return 0;
         else
@@ -69,6 +78,7 @@ public:
     }
 
     double getRoot2() {
+        //make sure the discriminant is a legal value
         double d = getDiscriminant();
         if (d < 0)
             return 0;
@@ -82,8 +92,10 @@ private:
     int value;
 
 public:
+    //default even number
     EvenNumber() { value = 0; }
     EvenNumber(int value) {
+        //If you give me an odd value, I'll make the value bigger.
         if (value % 2 == 1)
             value++;
         this->value = value;
@@ -95,6 +107,7 @@ public:
 };
 
 string sort(string& s) {
+    //simple bubble sort algorithm
     bool sorted = false;
     while (!sorted) {
         sorted = true;
@@ -119,7 +132,9 @@ public:
     MyInteger() { value = 0; }
     MyInteger(int value) { this->value = value; }
 
+    //accessor function
     int getValue() { return value; }
+    //Reuse the static isEven function, using this value
     bool isEven() const { return isEven(value); }
     bool isOdd() const { return !isEven(); }
     bool isPrime() const { return isPrime(value); }
@@ -128,6 +143,7 @@ public:
     static const bool isOdd(int v) { return !isEven(v); }
     static const bool isPrime(int v) {
         bool ret = true;
+        //count from 2 up to the square root of the value, looking for evenly divisible values
         for (int i=2; i<sqrt(v) && ret; i++) {
             if (v % i == 0)
                 ret = false;
@@ -135,10 +151,12 @@ public:
         return ret;
     }
 
+    //static functions that take MyInteger objects, but reuse the member functions
     static bool isEven(const MyInteger& i) { return i.isEven(); }
     static bool isOdd(const MyInteger& i) { return i.isOdd(); }
     static bool isPrime(const MyInteger& i) { return i.isPrime(); }
 
+    //Compare for equals
     bool equals(int i) { return i == this->getValue(); }
     bool equals(MyInteger& i) { return i.getValue() == this->getValue(); }
 
@@ -146,16 +164,19 @@ public:
         int ret = 0;
         bool neg = false;
         int start = 0;
+        //if the integer is negative, then start at 1
         if (s[0] == '-') {
             start = 1;
             neg = true;
         }
         for (int i=start; i<s.size(); i++) {
+            //If we get a non-digit, quit and return 0
             if (s[i] < '0' || s[i] > '9')
                 return 0;
             ret = ret*10 + (s[i] - '0');
         }
 
+        //if the string is negative, multiply by -1
         if (neg) ret *= -1;
         return ret;
     }
